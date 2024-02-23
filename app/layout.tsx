@@ -10,7 +10,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "NextPrice",
+  title: "NextPrice | Ecommerce Price Tracker",
   description:
     "Track product prices effortlessly and save money on your online shopping",
 };
