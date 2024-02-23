@@ -28,10 +28,6 @@ Next-Price is a product price tracker built using Next.js, Bright Data, Cheerio,
 
 - **Automated Cron Jobs**: Utilize cron jobs to automate periodic scraping, ensuring data is up-to-date.
 
-## Code Architecture and Reusability
-
-Next-Price is designed with a modular and scalable architecture, promoting code reusability and maintainability. It's easy to extend its functionality and integrate new features.
-
 ## Quick Start
 
 Follow these steps to set up the project locally on your machine.
