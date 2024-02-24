@@ -1,6 +1,6 @@
 # Next-Price
 
-Next-Price is a product price tracker built using Next.js, Bright Data, Cheerio, Nodemailer, MongoDB, Headless UI, and Tailwind CSS. It allows users to track prices of products from different websites.
+Next-Price is a product price tracker built using Next.js, Bright Data, Cheerio, Nodemailer, MongoDB, Headless UI, and Tailwind CSS. It allows users to track prices of products from amazon.
 
 ## Tech Stack
 
