@@ -2,8 +2,12 @@ import HeroCarousel from "@/components/HeroCarousel";
 import Searchbar from "@/components/Searchbar";
 import Image from "next/image";
 import { HiTrendingUp } from "react-icons/hi";
+import { getAllProducts } from "@/lib/actions";
+import ProductCard from "@/components/ProductCard";
 
-const Home = () => {
+const Home = async () => {
+  const allProducts = await getAllProducts();
+  console.log(allProducts);
   return (
     <>
       <section className="px-6 md:px-20 py-4">
@@ -41,10 +45,10 @@ const Home = () => {
           Trending
           <HiTrendingUp size={28} />
         </h2>
-        {/* ITEMS */}
+        {/* TRENDING ITEMS */}
         <div className="flex flex-wrap gap-x-8 gap-y-16">
-          {["Apple Macbook", "Iphone", "Book"].map((product) => (
-            <div>{product}</div>
+          {allProducts?.map((product) => (
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </section>
