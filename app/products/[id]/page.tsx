@@ -9,7 +9,7 @@ import ProductCard from "@/components/ProductCard";
 import Modal from "@/components/Modal";
 
 type Props = {
-  params: { id: String };
+  params: { id: string };
 };
 
 const ProductDetails = async ({ params: { id } }: Props) => {
@@ -151,7 +151,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             </div>
           </div>
           {/* MODAL FOR TRACKING */}
-          <Modal />
+          <Modal productId={id} />
         </div>
       </div>
       <div className="flex flex-col gap-16">
