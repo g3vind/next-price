@@ -6,6 +6,7 @@ import { Product } from "@/types";
 import { formatNumber } from "@/lib/utils";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
+import Modal from "@/components/Modal";
 
 type Props = {
   params: { id: String };
@@ -141,7 +142,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
                 )}`}
               />
               <PriceInfoCard
-                title="Current Price"
+                title="Lowest Price"
                 iconSrc="/assets/icons/arrow-down.svg"
                 value={`${product?.currency} ${formatNumber(
                   product?.lowestPrice
@@ -150,7 +151,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             </div>
           </div>
           {/* MODAL FOR TRACKING */}
-          Modal
+          <Modal />
         </div>
       </div>
       <div className="flex flex-col gap-16">
