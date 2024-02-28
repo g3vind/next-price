@@ -1,33 +1,33 @@
-"use server";
-import { EmailContent } from "./../../types/index";
-import Product from "../models/product.model";
-import { revalidatePath } from "next/cache";
-import { connectToDB } from "../mongoose";
-import { scrapeAmazonProduct } from "../scraper";
-import { getAveragePrice, getHighestPrice, getLowestPrice } from "../utils";
-import { User } from "@/types";
-import { generateEmailBody, sendEmail } from "../nodemailer";
-import { BsSendExclamationFill } from "react-icons/bs";
+"use server"
+import { EmailContent } from "./../../types/index"
+import Product from "../models/product.model"
+import { revalidatePath } from "next/cache"
+import { connectToDB } from "../mongoose"
+import { scrapeAmazonProduct } from "../scraper"
+import { getAveragePrice, getHighestPrice, getLowestPrice } from "../utils"
+import { User } from "@/types"
+import { generateEmailBody, sendEmail } from "../nodemailer"
+import { BsSendExclamationFill } from "react-icons/bs"
 
 export async function scrapeAndStoreProduct(productUrl: string) {
-  if (!productUrl) return;
+  if (!productUrl) return
 
   try {
     // connect to the db
-    connectToDB();
-    const scrapedProduct = await scrapeAmazonProduct(productUrl);
+    connectToDB()
+    const scrapedProduct = await scrapeAmazonProduct(productUrl)
 
-    if (!scrapedProduct) return;
+    if (!scrapedProduct) return
 
-    let product = scrapedProduct;
+    let product = scrapedProduct
     // check if product exists in db
-    const existingProduct = await Product.findOne({ url: scrapedProduct.url });
+    const existingProduct = await Product.findOne({ url: scrapedProduct.url })
 
     if (existingProduct) {
       const updatedPriceHistory: any = [
         ...existingProduct.priceHistory,
         { price: scrapedProduct.currentPrice },
-      ];
+      ]
 
       product = {
         ...scrapedProduct,
@@ -35,7 +35,7 @@ export async function scrapeAndStoreProduct(productUrl: string) {
         lowestPrice: getLowestPrice(updatedPriceHistory),
         highestPrice: getHighestPrice(updatedPriceHistory),
         averagePrice: getAveragePrice(updatedPriceHistory),
-      };
+      }
     }
     const newProduct = await Product.findOneAndUpdate(
       {
@@ -43,47 +43,47 @@ export async function scrapeAndStoreProduct(productUrl: string) {
       },
       product,
       { upsert: true, new: true }
-    );
-    revalidatePath(`/products/${newProduct._id}`);
+    )
+    revalidatePath(`/products/${newProduct._id}`)
   } catch (error: any) {
-    throw new Error(`Failed to create/update product ${error.message}`);
+    throw new Error(`Failed to create/update product ${error.message}`)
   }
 }
 
 export async function getProductById(productId: String) {
   try {
-    connectToDB();
-    const product = await Product.findOne({ _id: productId });
+    connectToDB()
+    const product = await Product.findOne({ _id: productId })
     if (!product) {
-      return null;
+      return null
     }
-    return product;
+    return product
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
 
 export async function getAllProducts() {
   try {
-    connectToDB();
-    const products = await Product.find();
-    return products;
+    connectToDB()
+    const products = await Product.find()
+    return products
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
 
 export async function getSimilarProducts(productId: String) {
   try {
-    connectToDB();
-    const currentProduct = await Product.findById(productId);
-    if (!currentProduct) return null;
+    connectToDB()
+    const currentProduct = await Product.findById(productId)
+    if (!currentProduct) return null
     const similarProducts = await Product.find({
       _id: { $ne: productId },
-    }).limit(3);
-    return similarProducts;
+    })
+    return similarProducts
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
 
@@ -92,24 +92,24 @@ export async function addUserEmailToProduct(
   userEmail: string
 ) {
   try {
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId)
 
-    if (!product) return;
+    if (!product) return
 
     const userExists = product.users.some(
       (user: User) => user.email === userEmail
-    );
+    )
 
     if (!userExists) {
-      product.users.push({ email: userEmail });
+      product.users.push({ email: userEmail })
 
-      await product.save();
+      await product.save()
 
-      const emailContent = await generateEmailBody(product, "WELCOME");
+      const emailContent = await generateEmailBody(product, "WELCOME")
 
-      await sendEmail(emailContent, [userEmail]);
+      await sendEmail(emailContent, [userEmail])
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 }
