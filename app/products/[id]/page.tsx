@@ -1,25 +1,25 @@
-import { getProductById, getSimilarProducts } from "@/lib/actions";
-import { redirect } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { Product } from "@/types";
-import { formatNumber } from "@/lib/utils";
-import PriceInfoCard from "@/components/PriceInfoCard";
-import ProductCard from "@/components/ProductCard";
-import Modal from "@/components/Modal";
+import { getProductById, getSimilarProducts } from "@/lib/actions"
+import { redirect } from "next/navigation"
+import Image from "next/image"
+import Link from "next/link"
+import { Product } from "@/types"
+import { formatNumber } from "@/lib/utils"
+import PriceInfoCard from "@/components/PriceInfoCard"
+import ProductCard from "@/components/ProductCard"
+import Modal from "@/components/Modal"
 
 type Props = {
-  params: { id: string };
-};
+  params: { id: string }
+}
 
 const ProductDetails = async ({ params: { id } }: Props) => {
-  const product: Product = await getProductById(id);
+  const product: Product = await getProductById(id)
 
   if (!product) {
-    redirect("/");
+    redirect("/")
   }
 
-  const similarProducts = await getSimilarProducts(id);
+  const similarProducts = await getSimilarProducts(id)
   return (
     <div className="product-container -mt-16">
       <div className="flex gap-28 xl:flex-row flex-col">
@@ -182,17 +182,17 @@ const ProductDetails = async ({ params: { id } }: Props) => {
       </div>
       {/* SIMILAR RECOMMENDARIONS */}
       {similarProducts && similarProducts?.length > 0 && (
-        <div className="py-14 flex flex-col gap-2 w-full">
+        <div className="py-12 flex flex-col gap-2 w-full">
           <p className="section-text">Similar Products</p>
-          <div className="flex flex-wrap gap-10 mt-7 w-full">
-            {similarProducts.map((product) => (
+          <div className="flex flex-wrap items-center justify-center gap-10 mt-7 w-full">
+            {similarProducts.slice(0, 3).map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ProductDetails;
+export default ProductDetails
